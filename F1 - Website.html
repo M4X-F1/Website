@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 - Website</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        /* HEADER & NAVIGATION */
+        .header {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 2px solid #DC0000;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 20px;
+            gap: 15px;
+            position: relative;
+        }
+
+        .logo-container {
+            position: relative;
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+
+        .logo {
+            height: 80px;
+            width: auto;
+            cursor: pointer;
+            transition: transform 0.3s, filter 0.3s;
+            object-fit: contain;
+            display: inline-block;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
+
+        .logo-tooltip {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            color: #000;
+            padding: 8px 15px;
+            border-radius: 5px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 1001;
+        }
+
+        .logo-container:hover .logo-tooltip {
+            opacity: 1;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            padding: 15px 0 0 0;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #DC0000 0%, #cc0000 100%);
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .nav-btn:hover:not(.hidden) {
+            background: linear-gradient(135deg, #FF0000 0%, #DC0000 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(220, 0, 0, 0.4);
+        }
+
+        .nav-btn.hidden {
+            display: none;
+        }
+
+        /* Tooltip per bottoni */
+        .nav-btn::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: -45px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            color: #000;
+            padding: 8px 15px;
+            border-radius: 5px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 1001;
+        }
+
+        .nav-btn:hover::after {
+            opacity: 1;
+        }
+
+        .lang-selector {
+            background: rgba(220, 0, 0, 0.2);
+            border: 2px solid #DC0000;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lang-selector:hover {
+            background: #DC0000;
+        }
+
+        /* MAIN CONTENT */
+        .container {
+            max-width: 1200px;
+            margin: 200px auto 40px;
+            padding: 0 20px;
+            min-height: 150vh;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* HOMEPAGE */
+        .homepage-content {
+            text-align: center;
+        }
+
+        .homepage-image {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(220, 0, 0, 0.3);
+        }
+
+        .homepage-title {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #DC0000;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            display: block;
+        }
+
+        .homepage-subtitle {
+            font-size: 18px;
+            margin-bottom: 40px;
+            color: #ddd;
+        }
+
+        /* WHAT IS F1 SECTION */
+        .f1-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .f1-image {
+            position: sticky;
+            top: 150px;
+            height: 500px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(220, 0, 0, 0.3);
+        }
+
+        .f1-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .f1-text {
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 600px;
+        }
+
+        .f1-text h2 {
+            color: #DC0000;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .f1-text p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: #ddd;
+            font-size: 16px;
+            text-align: justify;
+        }
+
+        /* REGULATIONS SECTION */
+        .pdf-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 10px;
+            border: 2px solid #DC0000;
+            text-align: center;
+        }
+
+        .pdf-container h2 {
+            color: #DC0000;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .pdf-container p {
+            color: #ddd;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .pdf-viewer {
+            width: 100%;
+            height: 800px;
+            border: 2px solid #DC0000;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .pdf-selector {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #DC0000;
+            margin-bottom: 30px;
+        }
+
+        .pdf-select-label {
+            display: block;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #DC0000;
+        }
+
+        .pdf-select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #DC0000;
+            color: white;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .pdf-select option {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .pdf-viewer-section {
+            display: none;
+        }
+
+        .pdf-viewer-section.active {
+            display: block;
+        }
+
+        .pdf-viewers-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .pdf-viewer-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pdf-viewer-wrapper h3 {
+            color: #DC0000;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .pdf-note {
+            background: rgba(220, 0, 0, 0.2);
+            border-left: 4px solid #DC0000;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            color: #ddd;
+        }
+
+        .teams-selector {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #DC0000;
+            margin-bottom: 30px;
+        }
+
+        .teams-select-label {
+            display: block;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #DC0000;
+        }
+
+        .teams-select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #DC0000;
+            color: white;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .teams-select option {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .teams-viewer-section {
+            display: none;
+        }
+
+        .teams-viewer-section.active {
+            display: block;
+        }
+
+        .standings-iframe {
+            width: 100%;
+            height: 800px;
+            border: 2px solid #DC0000;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .teams-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .teams-table thead {
+            background: #DC0000;
+        }
+
+        .teams-table th {
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+            border-bottom: 2px solid #DC0000;
+        }
+
+        .teams-table td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(220, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .teams-table td:first-child {
+            text-align: left;
+        }
+
+        .teams-table th:first-child {
+            text-align: left;
+        }
+
+        .teams-table tbody tr:hover {
+            background: rgba(220, 0, 0, 0.1);
+        }
+
+        .teams-table a {
+            color: #DC0000;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .teams-table a:hover {
+            color: #FF0000;
+            text-decoration: underline;
+        }
+
+        .driver-cell {
+            text-align: center;
+        }
+
+        /* CALENDAR TABLE */
+        .calendar-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .calendar-table thead {
+            background: #DC0000;
+        }
+
+        .calendar-table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #DC0000;
+        }
+
+        .calendar-table td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(220, 0, 0, 0.3);
+        }
+
+        .calendar-table tbody tr:hover {
+            background: rgba(220, 0, 0, 0.1);
+        }
+
+        /* TICKETS SECTION */
+        .tickets-controls {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 10px;
+            border: 2px solid #DC0000;
+            margin-bottom: 30px;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #DC0000;
+        }
+
+        .control-input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #DC0000;
+            color: white;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .control-input option {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, #DC0000 0%, #cc0000 100%);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .search-btn:hover {
+            background: linear-gradient(135deg, #FF0000 0%, #DC0000 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(220, 0, 0, 0.4);
+        }
+
+        /* RESULTS */
+        .results-container {
+            margin-top: 30px;
+        }
+
+        .result-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #DC0000;
+            border-radius: 5px;
+            animation: slideIn 0.3s ease-out;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .result-item:hover {
+            background: rgba(220, 0, 0, 0.1);
+            transform: translateX(10px);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .result-info h3 {
+            color: #DC0000;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+
+        .result-info p {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .result-link {
+            background: linear-gradient(135deg, #DC0000 0%, #cc0000 100%);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .result-link:hover {
+            background: linear-gradient(135deg, #FF0000 0%, #DC0000 100%);
+            transform: scale(1.05);
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #DC0000 0%, #cc0000 100%);
+            border: none;
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            font-size: 24px;
+            z-index: 999;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(220, 0, 0, 0.4);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .scroll-to-top:hover {
+            background: linear-gradient(135deg, #FF0000 0%, #DC0000 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(220, 0, 0, 0.6);
+        }
+
+        .scroll-to-top.show {
+            display: flex;
+        }
+
+        /* FOOTER */
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            border-top: 2px solid #DC0000;
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: 60px;
+            color: #888;
+            font-size: 14px;
+        }
+
+        footer p {
+            margin: 0;
+            line-height: 1.8;
+            white-space: pre-line;
+        }
+
+        footer strong {
+            color: #DC0000;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            footer {
+                padding: 20px 15px;
+                font-size: 12px;
+            }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header-content {
+                gap: 10px;
+            }
+
+            .logo {
+                height: 60px;
+                width: auto;
+            }
+
+            .nav-buttons {
+                gap: 8px;
+            }
+
+            .nav-btn {
+                padding: 10px 15px;
+                font-size: 12px;
+            }
+
+            .container {
+                margin-top: 200px;
+            }
+
+            .f1-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .f1-image {
+                position: static;
+                height: 300px;
+            }
+
+            .f1-text {
+                max-height: none;
+            }
+
+            .result-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .result-link {
+                width: 100%;
+                text-align: center;
+            }
+
+            .teams-table, .calendar-table {
+                font-size: 14px;
+            }
+
+            .teams-table th, .teams-table td,
+            .calendar-table th, .calendar-table td {
+                padding: 10px;
+            }
+
+            .pdf-viewers-container {
+                grid-template-columns: 1fr;
+            }
+
+            .pdf-viewer {
+                height: 600px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 10px 0;
+            }
+
+            .logo {
+                height: 50px;
+                width: auto;
+            }
+
+            .homepage-title {
+                font-size: 28px;
+            }
+
+            .nav-btn {
+                padding: 8px 12px;
+                font-size: 11px;
+            }
+
+            .container {
+                margin-top: 190px;
+            }
+
+            .scroll-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo-container">
+                <img class="logo" src="./Images/Logo.png" onclick="goHome()" title="Logo" alt="F1 Logo">
+                <div class="logo-tooltip" id="logoTooltip">Click logo to return home</div>
+            </div>
+
+            <div class="nav-buttons" id="navButtons">
+                <button class="nav-btn" data-en="What is F1?" data-it="Cos'è la F1?" data-fr="Qu'est-ce que la F1?" onclick="showSection('f1')" title="tooltip-f1"></button>
+                <button class="nav-btn" data-en="Regulations" data-it="Regolamento" data-fr="Règlement" onclick="showSection('regulations')" title="tooltip-regulations"></button>
+                <button class="nav-btn" data-en="Teams & Drivers 2026" data-it="Squadre 2026 e piloti" data-fr="Équipes et pilotes 2026" onclick="showSection('teams')" title="tooltip-teams"></button>
+                <button class="nav-btn" data-en="Calendar 2026" data-it="Calendario 2026" data-fr="Calendrier 2026" onclick="showSection('calendar')" title="tooltip-calendar"></button>
+                <button class="nav-btn" data-en="Tickets" data-it="Biglietti" data-fr="Billets" onclick="showSection('tickets')" title="tooltip-tickets"></button>
+                
+                <select class="lang-selector" id="langSelector" onchange="changeLanguage(this.value)">
+                    <option value="en">English</option>
+                    <option value="it">Italiano</option>
+                    <option value="fr">Français</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+        <!-- HOMEPAGE -->
+        <div id="homepage" class="section active">
+            <div class="homepage-content">
+                <h1 class="homepage-title" data-en="F1 Pocket" data-it="F1 Pocket" data-fr="F1 Pocket">F1 Pocket</h1>
+                <p class="homepage-subtitle" data-en="Formula 1 at your fingertips" data-it="Formula 1 a portata di mano" data-fr="Formulé 1 à votre portée">F1 at your fingertips</p>
+                <img src="Images/Index.jpg" class="homepage-image">
+            </div>
+        </div>
+
+        <!-- WHAT IS F1 -->
+        <div id="f1" class="section">
+            <div class="f1-content">
+                <div class="f1-image">
+                    <img src="./Images/What is a F1.jpg" alt="F1 Racing">
+                </div>
+                <div class="f1-text">
+                    <h2 data-en="What is Formula 1?" data-it="Cos'è la Formula 1?" data-fr="Qu'est-ce que la Formule 1?">What is Formula 1?</h2>
+                    <p data-en="Formula 1 is the highest class of international racing for single-seater racing cars. It is one of the most prestigious and popular sporting events in the world, featuring the best drivers and teams competing on iconic circuits across the globe." data-it="La Formula 1 è la classe più alta delle competizioni internazionali di auto da corsa monoposto. È uno degli eventi sportivi più prestigiosi e popolari del mondo, con i migliori piloti e team che competono su circuiti iconici in tutto il mondo." data-fr="La Formule 1 est la classe la plus élevée des compétitions internationales de voitures de course monoplace. C'est l'un des événements sportifs les plus prestigieux et les plus populaires au monde, avec les meilleurs pilotes et équipes en compétition sur des circuits emblématiques du monde entier.">Formula 1 is the highest class of international racing for single-seater racing cars. It is one of the most prestigious and popular sporting events in the world, featuring the best drivers and teams competing on iconic circuits across the globe.</p>
+                    
+                    <p data-en="The championship began in 1950 and has since evolved into a pinnacle of motorsport technology and human performance. Each season, teams design and build powerful cars that push the boundaries of engineering and aerodynamics." data-it="Il campionato è iniziato nel 1950 e da allora si è evoluto in un apice della tecnologia della velocità e della prestazione umana. Ogni stagione, i team progettano e costruiscono auto potenti che spingono i limiti dell'ingegneria e dell'aerodinamica." data-fr="Le championnat a commencé en 1950 et s'est depuis devenu un sommet de la technologie et de la performance humaine en sport automobile. Chaque saison, les équipes conçoivent et construisent des voitures puissantes qui repoussent les limites de l'ingénierie et de l'aérodynamique.">The championship began in 1950 and has since evolved into a pinnacle of motorsport technology and human performance. Each season, teams design and build powerful cars that push the boundaries of engineering and aerodynamics.</p>
+                    
+                    <p data-en="F1 combines speed, strategy, and skill. Races take place on specially designed circuits, some temporary street courses, with 24 races held each season. The sport demands exceptional physical fitness, mental concentration, and technical expertise from drivers who battle for supremacy in the most competitive racing series on Earth." data-it="F1 combina velocità, strategia e abilità. Le gare si disputano su circuiti appositamente progettati, alcuni circuiti urbani temporanei, con 24 gare ogni stagione. Lo sport richiede eccezionale forma fisica, concentrazione mentale e competenza tecnica dai piloti che lottano per la supremazia nella serie di corse più competitiva sulla Terra." data-fr="F1 combine la vitesse, la stratégie et l'habileté. Les courses se déroulent sur des circuits spécialement conçus, certains sur des circuits temporaires urbains, avec 24 courses par saison. Le sport exige une excellente condition physique, une concentration mentale et une expertise technique exceptionnelles de la part des pilotes qui luttent pour la suprématie dans la série de courses la plus compétitive du monde.">F1 combines speed, strategy, and skill. Races take place on specially designed circuits, some temporary street courses, with 24 races held each season. The sport demands exceptional physical fitness, mental concentration, and technical expertise from drivers who battle for supremacy in the most competitive racing series on Earth.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- REGULATIONS -->
+        <div id="regulations" class="section">
+            <div class="pdf-container">
+                <h2 data-en="2026 Regulations" data-it="Regolamento 2026" data-fr="Règlement 2026">2026 Regulations</h2>
+                <p data-en="Formula 1 Regulations Documents" data-it="Documenti Regolamento Formula 1" data-fr="Documents de Règlement Formule 1">Formula 1 Regulations Documents</p>
+                
+                <div class="pdf-selector">
+                    <label class="pdf-select-label" data-en="Select regulation type:" data-it="Seleziona tipo di regolamento:" data-fr="Sélectionnez le type de règlement:">Select regulation type:</label>
+                    <select class="pdf-select" id="regulationSelect">
+                        <option value="">-- Select a regulation type --</option>
+                        <option value="guide" data-en="F1 2026 Regulations Guide" data-it="Guida Regolamenti F1 2026" data-fr="Guide des Règlements F1 2026">F1 2026 Regulations Guide</option>
+                        <option value="technical" data-en="F1 2026 Technical Regulations" data-it="Regolamenti Tecnici F1 2026" data-fr="Règlements Techniques F1 2026">F1 2026 Technical Regulations</option>
+                    </select>
+
+                    <button class="search-btn" onclick="searchRegulations()" style="margin-top: 15px;" data-en="Search" data-it="Cerca" data-fr="Rechercher">Search</button>
+                </div>
+
+                <div id="regulationsResults" style="margin-top: 30px;">
+                </div>
+            </div>
+        </div>
+
+        <!-- TEAMS & DRIVERS -->
+        <div id="teams" class="section">
+            <h2 style="color: #DC0000; margin-bottom: 30px; font-size: 32px;" data-en="Teams & Drivers 2026" data-it="Squadre 2026 e piloti" data-fr="Équipes et pilotes 2026">Teams & Drivers 2026</h2>
+            
+            <div class="teams-selector">
+                <label class="teams-select-label" data-en="Select view:" data-it="Seleziona vista:" data-fr="Sélectionnez l'affichage:">Select view:</label>
+                <select class="teams-select" id="teamsSelect">
+                    <option value="">-- Select a view --</option>
+                    <option value="table" data-en="Teams & Drivers 2026" data-it="Squadre & Piloti 2026" data-fr="Équipes et Pilotes 2026">Teams & Drivers 2026</option>
+                    <option value="standings" data-en="F1 Drivers' and Constructors' Championships 2026" data-it="Campionati Piloti e Costruttori F1 2026" data-fr="Championnats Pilotes et Constructeurs F1 2026">F1 Drivers' and Constructors' Championships 2026</option>
+                </select>
+
+                <button class="search-btn" onclick="searchTeams()" data-en="Search" data-it="Cerca" data-fr="Rechercher">Search</button>
+            </div>
+
+            <div id="teamsResults">
+            </div>
+
+            <!-- Hidden table for "Teams & Drivers 2026" view -->
+            <div id="teamsTable" class="teams-viewer-section" style="display: none;">
+                <div class="teams-container">
+                    <table class="teams-table">
+                        <thead>
+                            <tr>
+                                <th data-en="Team" data-it="Squadra" data-fr="Équipe">Team</th>
+                                <th data-en="Driver 1" data-it="Pilota 1" data-fr="Pilote 1">Driver 1</th>
+                                <th data-en="Driver 2" data-it="Pilota 2" data-fr="Pilote 2">Driver 2</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="https://www.mclaren.com" target="_blank">McLaren</a></td>
+                                <td class="driver-cell"><a href="https://landonorris.com/" target="_blank">Lando Norris</a></td>
+                                <td class="driver-cell"><a href="https://store.oscarpiastri.com/?srsltid=AfmBOorLdKhzKY0rF5o7NT2vuIFXV4dz5AiFKPsY-kUAagTCrDUHZ5As" target="_blank">Oscar Piastri</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="https://www.ferrari.com" target="_blank">Ferrari</a></td>
+                                <td class="driver-cell"><a href="https://charlesleclerc.com/it/" target="_blank">Charles Leclerc</a></td>
+                                <td class="driver-cell"><a href="https://www.lewishamilton.com/" target="_blank">Lewis Hamilton</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="https://www.redbullracing.com" target="_blank">Red Bull Racing</a></td>
+                                <td class="driver-cell"><a href="https://store.verstappen.com/en/" target="_blank">Max Verstappen</a></td>
+                                <td class="driver-cell"><a href="https://isackhadjar.com/" target="_blank">Isack Hadjar</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="https://www.mercedesamgf1.com" target="_blank">Mercedes AMG</a></td>
+                                <td class="driver-cell"><a href="https://www.georgerussell63.com/" target="_blank">George Russell</a></td>
+                                <td class="driver-cell"><a href="https://www.mercedesamgf1.com/drivers/driver/andrea-kimi-antonelli" target="_blank">Andrea Kimi Antonelli</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="https://www.astonmartinf1.com" target="_blank">Aston Martin Racing</a></td>
+                                <td class="driver-cell"><a href="https://www.fernandoalonso.com/" target="_blank">Fernando Alonso</a></td>
+                                <td class="driver-cell"><a href="https://www.lancestroll.com/" target="_blank">Lance Stroll</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="https://www.haasf1.com" target="_blank">Haas F1 Team</a></td>
+                                <td class="driver-cell"><a href="https://www.esteban-ocon.com/" target="_blank">Esteban Ocon</a></td>
+                                <td class="driver-cell"><a href="https://www.olliebearman.com/" target="_blank">Oliver Bearman</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="https://www.alpinecars.com" target="_blank">Alpine</a></td>
+                                <td class="driver-cell"><a href="https://www.pierregasly.com/it/?srsltid=AfmBOoqvVuReqK249DVcdf-KqsKdMA8bNc_Q8bYtZbnqhy0kfJ-PAhUW" target="_blank">Pierre Gasly</a></td>
+                                <td class="driver-cell"><a href="https://www.francolapinto.com/" target="_blank">Franco Colapinto</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="https://www.williamsf1.com/" target="_blank">Williams</a></td>
+                                <td class="driver-cell"><a href="https://carlossainz.es/en/" target="_blank">Carlos Sainz Jr.</a></td>
+                                <td class="driver-cell"><a href="https://www.alexalbon.com/home" target="_blank">Alexander Albon</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="https://www.visacashapprb.com/int-en" target="_blank">Racing Bulls</a></td>
+                                <td class="driver-cell"><a href="https://www.redbull.com/int-en/athlete/liam-lawson" target="_blank">Liam Lawson</a></td>
+                                <td class="driver-cell"><a href="https://www.redbull.com/int-en/juniorteam/drivers/athlete-profile-arvid-lindblad" target="_blank">Arvid Lindblad</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="https://www.audiF1.com" target="_blank">Audi F1 Team</a></td>
+                                <td class="driver-cell"><a href="https://www.nicohulkenberg.net/" target="_blank">Nico Hulkenberg</a></td>
+                                <td class="driver-cell"><a href="https://www.gabrielbortoleto.com.br/en/" target="_blank">Gabriel Bortoleto</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="https://www.cadillacf1.com" target="_blank">Cadillac-Ferrari</a></td>
+                                <td class="driver-cell"><a href="https://primef1.com/valtteribottas/" target="_blank">Valtteri Bottas</a></td>
+                                <td class="driver-cell"><a href="https://checoperez.com/es-eur?srsltid=AfmBOood_1sfaLyyyZg6bgQNnkWHC0bxbTD6Vdt-KpFODveVKPXZK521" target="_blank">Sergio Pérez</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- CALENDAR -->
+        <div id="calendar" class="section">
+            <h2 style="color: #DC0000; margin-bottom: 30px; font-size: 32px;" data-en="Calendar 2026" data-it="Calendario 2026" data-fr="Calendrier 2026">Calendar 2026</h2>
+            <div class="teams-container">
+                <table class="calendar-table">
+                    <thead>
+                        <tr>
+                            <th data-en="Dates" data-it="Date" data-fr="Dates">Dates</th>
+                            <th data-en="Circuit" data-it="Circuito" data-fr="Circuit">Circuit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>March 6-8</td>
+                            <td>Albert Park Circuit</td>
+                        </tr>
+                        <tr>
+                            <td>March 13-15</td>
+                            <td>Shanghai International Circuit</td>
+                        </tr>
+                        <tr>
+                            <td>March 27-29</td>
+                            <td>Suzuka International Racing Course</td>
+                        </tr>
+                        <tr>
+                            <td>April 10-12</td>
+                            <td>Sakhir Circuit</td>
+                        </tr>
+                        <tr>
+                            <td>April 17-19</td>
+                            <td>Jeddah Corniche Circuit</td>
+                        </tr>
+                        <tr>
+                            <td>May 1-3</td>
+                            <td>Miami Grand Prix</td>
+                        </tr>
+                        <tr>
+                            <td>May 22-24</td>
+                            <td>Circuit Gilles Villeneuve</td>
+                        </tr>
+                        <tr>
+                            <td>June 5-7</td>
+                            <td>Circuit de Monaco</td>
+                        </tr>
+                        <tr>
+                            <td>June 12-14</td>
+                            <td>Circuit de Barcelona-Catalunya</td>
+                        </tr>
+                        <tr>
+                            <td>June 26-28</td>
+                            <td>Red Bull Ring</td>
+                        </tr>
+                        <tr>
+                            <td>July 3-5</td>
+                            <td>Silverstone Circuit</td>
+                        </tr>
+                        <tr>
+                            <td>July 17-19</td>
+                            <td>Circuit de Spa-Francorchamps</td>
+                        </tr>
+                        <tr>
+                            <td>July 24-26</td>
+                            <td>Hungaroring</td>
+                        </tr>
+                        <tr>
+                            <td>August 21-23</td>
+                            <td>Zandvoort Circuit</td>
+                        </tr>
+                        <tr>
+                            <td>September 4-6</td>
+                            <td>Monza</td>
+                        </tr>
+                        <tr>
+                            <td>September 11-13</td>
+                            <td>Circuit de Madrid</td>
+                        </tr>
+                        <tr>
+                            <td>September 25-27</td>
+                            <td>Baku City Circuit</td>
+                        </tr>
+                        <tr>
+                            <td>October 9-11</td>
+                            <td>Marina Bay Street Circuit</td>
+                        </tr>
+                        <tr>
+                            <td>October 23-25</td>
+                            <td>Circuit of the Americas</td>
+                        </tr>
+                        <tr>
+                            <td>October 30 - November 1</td>
+                            <td>Mexico City Grand Prix</td>
+                        </tr>
+                        <tr>
+                            <td>November 6-8</td>
+                            <td>Autódromo José María Guizado</td>
+                        </tr>
+                        <tr>
+                            <td>November 19-21</td>
+                            <td>Las Vegas Grand Prix</td>
+                        </tr>
+                        <tr>
+                            <td>November 27-29</td>
+                            <td>Lusail International Circuit</td>
+                        </tr>
+                        <tr>
+                            <td>December 4-6</td>
+                            <td>Yas Marina Circuit</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TICKETS -->
+        <div id="tickets" class="section">
+            <h2 style="color: #DC0000; margin-bottom: 30px; font-size: 32px;" data-en="Book Your Tickets" data-it="Prenota i Tuoi Biglietti" data-fr="Réservez vos billets">Book Your Tickets</h2>
+            
+            <div class="tickets-controls">
+                <div class="control-group">
+                    <label class="control-label" data-en="Select Circuit:" data-it="Seleziona Circuito:" data-fr="Sélectionnez le circuit:">Select Circuit:</label>
+                    <select class="control-input" id="circuitSelect">
+                        <option value="">-- Select a circuit --</option>
+                        <option value="melbourne">Albert Park Circuit</option>
+                        <option value="shanghai">Shanghai International Circuit</option>
+                        <option value="suzuka">Suzuka International Racing Course</option>
+                        <option value="bahrain">Sakhir Circuit</option>
+                        <option value="jeddah">Jeddah Corniche Circuit</option>
+                        <option value="miami">Miami Grand Prix</option>
+                        <option value="montreal">Circuit Gilles Villeneuve</option>
+                        <option value="monaco">Circuit de Monaco</option>
+                        <option value="barcelona">Circuit de Barcelona-Catalunya</option>
+                        <option value="austria">Red Bull Ring</option>
+                        <option value="silverstone">Silverstone Circuit</option>
+                        <option value="spa">Circuit de Spa-Francorchamps</option>
+                        <option value="hungary">Hungaroring</option>
+                        <option value="zandvoort">Zandvoort Circuit</option>
+                        <option value="monza">Monza</option>
+                        <option value="madrid">Circuit de Madrid</option>
+                        <option value="baku">Baku City Circuit</option>
+                        <option value="singapore">Marina Bay Street Circuit</option>
+                        <option value="americas">Circuit of the Americas</option>
+                        <option value="mexico">Mexico City Grand Prix</option>
+                        <option value="interlagos">Autódromo José María Guizado</option>
+                        <option value="lasvegas">Las Vegas Grand Prix</option>
+                        <option value="lusail">Lusail International Circuit</option>
+                        <option value="abudhabi">Yas Marina Circuit</option>
+                    </select>
+                </div>
+
+                <button class="search-btn" onclick="searchTickets()" data-en="Search Tickets" data-it="Cerca Biglietti" data-fr="Rechercher des billets">Search Tickets</button>
+            </div>
+
+            <div class="results-container" id="ticketsResults">
+                <div class="no-results" data-en="Select a circuit and click 'Search Tickets' to find available tickets." data-it="Seleziona un circuito e clicca 'Cerca Biglietti' per trovare i biglietti disponibili." data-fr="Sélectionnez un circuit et cliquez sur 'Rechercher des billets' pour trouver les billets disponibles.">Select a circuit and click 'Search Tickets' to find available tickets.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCROLL TO TOP BUTTON -->
+    <button class="scroll-to-top" id="scrollToTopBtn" onclick="scrollToTop()">↑</button>
+
+    <!-- FOOTER -->
+    <footer>
+        <p data-en="© <strong>2026</strong> - All rights reserved<br>Designed By <strong>L.C. D.C. & A.T.</strong>" data-it="© <strong>2026</strong> - Tutti i diritti riservati<br>Progettato da <strong>L.C. D.C. & A.T.</strong>" data-fr="© <strong>2026</strong> - Tous droits réservés<br>Conçu par <strong>L.C. D.C. & A.T.</strong>">© <strong>2026</strong> - All rights reserved<br>Designed By <strong>L.C. D.C. & A.T.</strong></p>
+    </footer>
+
+    <script>
+        // GLOBAL STATE
+        let currentLanguage = 'en';
+        const circuitLinks = {
+            'melbourne': { name: 'Albert Park Circuit', url: 'https://www.f1-australia.com/' },
+            'shanghai': { name: 'Shanghai International Circuit', url: 'https://www.formula1shanghai.com/?srsltid=AfmBOopSRJg8qSM5QcXDlv9u4CGcD4kfFs_3O0fg14vf1zmJNnaMY5Tr' },
+            'suzuka': { name: 'Suzuka International Racing Course', url: 'https://www.japan.gp/' },
+            'bahrain': { name: 'Sakhir Circuit', url: 'https://www.bahrain.gp/' },
+            'jeddah': { name: 'Jeddah Corniche Circuit', url: 'https://www.saudi.gp/' },
+            'miami': { name: 'Miami Grand Prix', url: 'https://www.f1miamiusa.com/' },
+            'montreal': { name: 'Circuit Gilles Villeneuve', url: 'https://www.canada.gp/' },
+            'monaco': { name: 'Circuit de Monaco', url: 'https://www.f1monaco.com/' },
+            'barcelona': { name: 'Circuit de Barcelona-Catalunya', url: 'https://www.spainf1.com/' },
+            'austria': { name: 'Red Bull Ring', url: 'https://www.f1austria.com/' },
+            'silverstone': { name: 'Silverstone Circuit', url: 'https://www.british.gp/' },
+            'spa': { name: 'Circuit de Spa-Francorchamps', url: 'https://www.belgium.gp/' },
+            'hungary': { name: 'Hungaroring', url: 'https://www.f1hungary.com/' },
+            'zandvoort': { name: 'Zandvoort Circuit', url: 'https://www.dutchtickets.gp/' },
+            'monza': { name: 'Monza', url: 'https://www.f1italy.com/it' },
+            'madrid': { name: 'Circuit de Madrid', url: 'https://www.spainf1.com/' },
+            'baku': { name: 'Baku City Circuit', url: 'https://www.azerbaijanf1.com/' },
+            'singapore': { name: 'Marina Bay Street Circuit', url: 'https://www.f1-singapore.com/' },
+            'americas': { name: 'Circuit of the Americas', url: 'https://www.austin.gp/' },
+            'mexico': { name: 'Mexico City Grand Prix', url: 'https://www.mexico.gp/' },
+            'interlagos': { name: 'Autódromo José María Guizado', url: 'https://www.brasilf1.com/' },
+            'lasvegas': { name: 'Las Vegas Grand Prix', url: 'https://www.lasvegas.gp/' },
+            'lusail': { name: 'Lusail International Circuit', url: 'https://www.qatar.gp/' },
+            'abudhabi': { name: 'Yas Marina Circuit', url: 'https://www.abudhabi.gp/' }
+        };
+
+        // LANGUAGE SYSTEM
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            document.documentElement.lang = lang;
+            updateAllText(lang);
+        }
+
+        function updateAllText(lang) {
+            // Update all elements with data attributes
+            document.querySelectorAll('[data-en][data-it]').forEach(el => {
+                if (el.tagName === 'BUTTON' || el.tagName === 'SELECT' || el.tagName === 'LABEL') {
+                    el.textContent = el.dataset[lang] || el.textContent;
+                } else if (el.tagName === 'OPTION') {
+                    el.textContent = el.dataset[lang] || el.textContent;
+                } else if (el.tagName === 'P' && el.closest('footer')) {
+                    // Special handling for footer paragraph with <br> tags
+                    el.innerHTML = el.dataset[lang] || el.innerHTML;
+                } else {
+                    el.textContent = el.dataset[lang] || el.textContent;
+                }
+            });
+
+            // Update logo tooltip
+            const tooltip = document.getElementById('logoTooltip');
+            const tooltips = {
+                'en': 'Click logo to return home',
+                'it': 'Clicca il logo per tornare alla homepage',
+                'fr': 'Cliquez sur le logo pour revenir à la maison'
+            };
+            tooltip.textContent = tooltips[lang];
+
+            // Update button tooltips
+            updateButtonTooltips(lang);
+
+            // Update no results message
+            updateNoResultsMessage();
+        }
+
+        function updateButtonTooltips(lang) {
+            const tooltipTexts = {
+                'en': {
+                    'f1': 'Click to view What is F1?',
+                    'regulations': 'Click to view Regulations',
+                    'teams': 'Click to view Teams & Drivers 2026',
+                    'calendar': 'Click to view Calendar 2026',
+                    'tickets': 'Click to view Tickets'
+                },
+                'it': {
+                    'f1': 'Clicca per visualizzare Cos\'è la F1?',
+                    'regulations': 'Clicca per visualizzare Regolamento',
+                    'teams': 'Clicca per visualizzare Squadre 2026 e piloti',
+                    'calendar': 'Clicca per visualizzare Calendario 2026',
+                    'tickets': 'Clicca per visualizzare Biglietti'
+                },
+                'fr': {
+                    'f1': 'Cliquez pour voir Qu\'est-ce que la F1?',
+                    'regulations': 'Cliquez pour voir Règlement',
+                    'teams': 'Cliquez pour voir Équipes et pilotes 2026',
+                    'calendar': 'Cliquez pour voir Calendrier 2026',
+                    'tickets': 'Cliquez pour voir Billets'
+                }
+            };
+
+            const buttons = document.querySelectorAll('.nav-btn');
+            const sections = ['f1', 'regulations', 'teams', 'calendar', 'tickets'];
+
+            buttons.forEach((btn, index) => {
+                const section = sections[index];
+                if (tooltipTexts[lang][section]) {
+                    btn.setAttribute('data-tooltip', tooltipTexts[lang][section]);
+                }
+            });
+        }
+
+        // NAVIGATION
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show selected section
+            if (sectionId === 'home') {
+                document.getElementById('homepage').classList.add('active');
+            } else {
+                document.getElementById(sectionId).classList.add('active');
+            }
+
+            // Update button visibility
+            updateNavButtons(sectionId);
+
+            // Reinitialize logo tooltip for the new page
+            setTimeout(initLogoTooltip, 0);
+        }
+
+        function goHome() {
+            showSection('home');
+            window.scrollTo(0, 0);
+        }
+
+        function updateNavButtons(currentSection) {
+            const buttons = document.querySelectorAll('.nav-buttons .nav-btn');
+            const sections = ['f1', 'regulations', 'teams', 'calendar', 'tickets'];
+
+            buttons.forEach((btn, index) => {
+                if (sections[index] === currentSection) {
+                    btn.classList.add('hidden');
+                } else {
+                    btn.classList.remove('hidden');
+                }
+            });
+        }
+
+        function searchTeams() {
+            const select = document.getElementById('teamsSelect');
+            const view = select.value;
+            const resultsContainer = document.getElementById('teamsResults');
+            const teamsTableSection = document.getElementById('teamsTable');
+
+            if (!view) {
+                const messages = {
+                    'en': 'Please select a view',
+                    'it': 'Seleziona una vista',
+                    'fr': 'Veuillez sélectionner une vue'
+                };
+                resultsContainer.innerHTML = `<div class="no-results">${messages[currentLanguage]}</div>`;
+                teamsTableSection.style.display = 'none';
+                return;
+            }
+
+            if (view === 'table') {
+                // Show the table only after click
+                resultsContainer.style.display = 'none';
+                teamsTableSection.style.display = 'block';
+                teamsTableSection.classList.add('active');
+            } else if (view === 'standings') {
+                // Show standings card
+                teamsTableSection.style.display = 'none';
+                teamsTableSection.classList.remove('active');
+                resultsContainer.style.display = 'block';
+                resultsContainer.innerHTML = `
+                    <div class="result-item">
+                        <div class="result-info">
+                            <h3 data-en="F1 Drivers' and Constructors' Championships 2026" data-it="Campionati Piloti e Costruttori F1 2026" data-fr="Championnats Pilotes et Constructeurs F1 2026">F1 Drivers' and Constructors' Championships 2026</h3>
+                            <p data-en="View the official F1 standings" data-it="Visualizza la classifica ufficiale della F1" data-fr="Affichage du classement officiel de la F1">View the official F1 standings</p>
+                        </div>
+                        <a href="https://www.skysports.com/f1/standings" target="_blank" class="result-link" data-en="View Standings" data-it="Guarda la Classifica" data-fr="Affichage du Classement">View Standings</a>
+                    </div>
+                `;
+                // Re-translate new elements
+                document.querySelectorAll('[data-en][data-it]').forEach(el => {
+                    const text = el.dataset[currentLanguage];
+                    if (text) el.textContent = text;
+                });
+            }
+        }
+
+        // REGULATIONS SEARCH
+        const regulationDocs = {
+            'guide': {
+                name: 'F1 2026 Regulations Guide',
+                url: 'https://e.issuu.com/embed.html?d=f1_2026_-_regulations_guide&u=issufia'
+            },
+            'technical': {
+                name: 'F1 2026 Technical Regulations',
+                url: 'https://www.fia.com/sites/default/files/fia_2026_formula_1_technical_regulations_issue_8_-_2024-06-24.pdf'
+            }
+        };
+
+        function searchRegulations() {
+            const select = document.getElementById('regulationSelect');
+            const regulationType = select.value;
+            const resultsContainer = document.getElementById('regulationsResults');
+
+            if (!regulationType) {
+                const messages = {
+                    'en': 'Please select a regulation type',
+                    'it': 'Seleziona un tipo di regolamento',
+                    'fr': 'Veuillez sélectionner un type de règlement'
+                };
+                resultsContainer.innerHTML = `<div class="no-results">${messages[currentLanguage]}</div>`;
+                return;
+            }
+
+            const doc = regulationDocs[regulationType];
+            resultsContainer.innerHTML = '';
+
+            // Create regulation viewer
+            const resultItem = document.createElement('div');
+            resultItem.style.marginBottom = '30px';
+            resultItem.innerHTML = `
+                <h3 style="color: #DC0000; margin-bottom: 15px; font-size: 18px;">${doc.name}</h3>
+                <iframe class="pdf-viewer" src="${doc.url}"></iframe>
+            `;
+
+            resultsContainer.appendChild(resultItem);
+        }
+
+        // TICKETS SEARCH
+        function searchTickets() {
+            const select = document.getElementById('circuitSelect');
+            const circuitKey = select.value;
+            const resultsContainer = document.getElementById('ticketsResults');
+
+            if (!circuitKey) {
+                const messages = {
+                    'en': 'Please select a circuit',
+                    'it': 'Seleziona un circuito',
+                    'fr': 'Veuillez sélectionner un circuit'
+                };
+                resultsContainer.innerHTML = `<div class="no-results">${messages[currentLanguage]}</div>`;
+                return;
+            }
+
+            const circuit = circuitLinks[circuitKey];
+            resultsContainer.innerHTML = '';
+
+            // Animate results
+            const resultItem = document.createElement('div');
+            resultItem.className = 'result-item';
+            resultItem.innerHTML = `
+                <div class="result-info">
+                    <h3>${circuit.name}</h3>
+                    <p data-en="Click below to book your tickets" data-it="Clicca qui sotto per prenotare i tuoi biglietti" data-fr="Cliquez ci-dessous pour réserver vos billets">Click below to book your tickets</p>
+                </div>
+                <a href="${circuit.url}" target="_blank" class="result-link" data-en="Book Tickets" data-it="Prenota Biglietti" data-fr="Réserver des billets">Book Tickets</a>
+            `;
+
+            resultsContainer.appendChild(resultItem);
+
+            // Re-translate new elements
+            document.querySelectorAll('[data-en][data-it]').forEach(el => {
+                const text = el.dataset[currentLanguage];
+                if (text) el.textContent = text;
+            });
+        }
+
+        function updateNoResultsMessage() {
+            const messages = {
+                'en': 'Select a circuit and click \'Search Tickets\' to find available tickets.',
+                'it': 'Seleziona un circuito e clicca \'Cerca Biglietti\' per trovare i biglietti disponibili.',
+                'fr': 'Sélectionnez un circuit et cliquez sur \'Rechercher des billets\' pour trouver les billets disponibles.'
+            };
+
+            const noResults = document.querySelector('.no-results');
+            if (noResults && !document.getElementById('circuitSelect').value) {
+                noResults.textContent = messages[currentLanguage];
+            }
+        }
+
+        // SCROLL TO TOP BUTTON
+        const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+
+        // Mostra/nascondi il bottone quando scrolli
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.add('show');
+            } else {
+                scrollToTopBtn.classList.remove('show');
+            }
+        });
+
+        // Scroll to top senza cambiare URL
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // TOOLTIP LOGO - Persistente su tutte le pagine
+        function initLogoTooltip() {
+            const logo = document.querySelector('.logo');
+            const tooltip = document.getElementById('logoTooltip');
+            let tooltipTimeout;
+
+            logo.addEventListener('mouseenter', function() {
+                tooltipTimeout = setTimeout(function() {
+                    tooltip.style.opacity = '1';
+                }, 2000);
+            });
+
+            logo.addEventListener('mouseleave', function() {
+                clearTimeout(tooltipTimeout);
+                tooltip.style.opacity = '0';
+            });
+        }
+
+        // TOOLTIP DELAY
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize logo tooltip
+            initLogoTooltip();
+
+            // Initialize language and text
+            updateAllText('en');
+
+            // Initialize nav buttons
+            updateNavButtons('home');
+
+            // Initialize language dropdown
+            document.getElementById('langSelector').value = 'en';
+        });
+    </script>
+</body>
+</html>
